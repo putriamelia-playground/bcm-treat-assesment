@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\CompanydataResource\Pages;
+namespace App\Filament\Resources\CompanyDataResource\Pages;
 
-use App\Filament\Resources\CompanydataResource;
-use Filament\Actions;
+use App\Filament\Resources\CompanyDataResource;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Actions;
 
-class EditCompanydata extends EditRecord
+class EditCompanyData extends EditRecord
 {
-    protected static string $resource = CompanydataResource::class;
+    protected static string $resource = CompanyDataResource::class;
 
     protected function getHeaderActions(): array
     {

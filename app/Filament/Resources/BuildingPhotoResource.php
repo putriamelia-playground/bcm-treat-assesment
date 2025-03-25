@@ -43,7 +43,6 @@ class BuildingPhotoResource extends Resource
                     ->maxLength(255)
                     ->columnSpan('1'),
                 FileUpload::make('front_building_photo')
-                    ->disk('user')
                     ->image()
                     ->label('Lokasi Depan Gedung'),
                 FileUpload::make('entrance_building_photo')

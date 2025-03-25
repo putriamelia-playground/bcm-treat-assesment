@@ -11,6 +11,8 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Forms;
 use Filament\Tables;
@@ -37,67 +39,7 @@ class ToolsAvailabilityResource extends Resource
     {
         return $form
             ->schema([
-                // Repeater::make('bcm_tools_availabilities')
-                //     ->schema([
-                //         Checkbox::make('is_available')
-                //             ->label(fn($state, $get) => __($get('tools')))
-                //             ->live()
-                //             ->default(false),
-                //         TextInput::make('amount')
-                //             ->label('Jumlah')
-                //             ->nullable()
-                //             ->disabled(fn($get) => !$get('is_available')),
-                //     ])
-                //     ->addable(false)
-                //     ->deletable(false)
-                //     ->reorderable(false)
-                //     ->grid(3)
-                //     ->columnSpan('full')
-                //     ->default([
-                //         ['tools' => 'APAR'],
-                //         ['tools' => 'APAB'],
-                //         // ['tools' => 'CCTV'],
-                //         // ['tools' => 'Tangga Darurat'],
-                //         // ['tools' => 'Genset'],
-                //         // ['tools' => 'Bahan Bakar Genset'],
-                //         // ['tools' => 'Assembly point'],
-                //         // ['tools' => 'Kotak P3K'],
-                //         // ['tools' => 'UPS(Uninterruptible Power Supply)'],
-                //         // ['tools' => 'Nomor Kontak Darurat'],
-                //     ]),
-                // Repeater::make('bcm_tools_availabilities_2')
-                //     ->schema([
-                //         Checkbox::make('is_available')
-                //             ->label(fn($state, $get) => __($get('tools')))
-                //             ->live()
-                //             ->default(false),
-                //     ])
-                //     ->addable(false)
-                //     ->deletable(false)
-                //     ->reorderable(false)
-                //     ->grid(3)
-                //     ->columnSpan('full')
-                //     ->default([
-                //         ['tools' => 'Sprinkler'],
-                //         ['tools' => 'Hidran'],
-                //         ['tools' => 'Trafo'],
-                //         ['tools' => 'Smoke Detector'],
-                //         ['tools' => 'Heat Detector'],
-                //         ['tools' => 'Petunjuk Jalur Evakuasi'],
-                //         ['tools' => 'Paging Gedung'],
-                //     ])
-                Repeater::make('dummy')
-                    ->schema([
-                        TextInput::make('name')->required(),
-                        Select::make('role')
-                            ->options([
-                                'member' => 'Member',
-                                'administrator' => 'Administrator',
-                                'owner' => 'Owner',
-                            ])
-                            ->required(),
-                    ])
-                    ->columns(2)
+                //
             ]);
     }
 
@@ -105,12 +47,31 @@ class ToolsAvailabilityResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('bcm_building_assignment_code')
+                    ->label('Kode Assesment'),
+                TextColumn::make('tools')
+                    ->label('Alat')
+                    ->alignment('center'),
+                IconColumn::make('is_available')
+                    ->boolean()
+                    ->label('Ketersediaan Alat')
+                    ->alignment('center'),
+                TextColumn::make('amount')
+                    ->label('Jumlah')
+                    ->formatStateUsing(function (string $state) {
+                        if ($state == 0) {
+                            return '';
+                        } else {
+                            return $state;
+                        }
+                    })
+                    ->alignment('center'),
             ])
             ->filters([
                 //
             ])
             ->actions([
+                // Tables\Actions\CreateAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([

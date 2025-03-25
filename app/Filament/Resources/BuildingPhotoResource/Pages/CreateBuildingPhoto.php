@@ -12,7 +12,7 @@ class CreateBuildingPhoto extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['bcm_building_assignment_code'] = 'BPBD/01/29022025/RSV-01';
+        $data['bcm_building_assignment_code'] = 'JSR/01/25032025/PAV-01';
 
         return $data;
     }

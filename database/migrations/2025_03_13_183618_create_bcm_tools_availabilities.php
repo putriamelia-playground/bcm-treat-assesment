@@ -13,7 +13,8 @@ return new class extends Migration {
         Schema::create('bcm_tools_availabilities', function (Blueprint $table) {
             $table->id();
             $table->string('bcm_building_assignment_code');
-            $table->enum('tools', ['APAR', 'APAB', 'CCTV', 'Genset', 'Bahan Bakar Genset', 'Assembly point', 'Kotak P3K', 'UPS(Uninterruptible Power Supply)', 'Nomor Kontak Darurat', 'Sistem alarm kebakaran']);
+            $table->string('tools');
+            $table->string('tools_type');
             $table->boolean('is_available')->nullable();
             $table->string('amount')->nullable();
             $table->timestamps();

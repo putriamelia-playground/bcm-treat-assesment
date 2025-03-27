@@ -23,7 +23,7 @@ class BuildingPhotoResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-building-library';
 
-    protected static ?string $navigationGroup = 'Settings';
+    protected static ?string $navigationGroup = 'Assessment';
 
     protected static ?string $navigationLabel = 'Foto Gedung';
 

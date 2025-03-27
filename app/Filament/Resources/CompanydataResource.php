@@ -22,7 +22,7 @@ class CompanyDataResource extends Resource
 {
     protected static ?string $model = CompanyData::class;
 
-    protected static ?string $navigationGroup = 'Settings';
+    protected static ?string $navigationGroup = 'Assessment';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 

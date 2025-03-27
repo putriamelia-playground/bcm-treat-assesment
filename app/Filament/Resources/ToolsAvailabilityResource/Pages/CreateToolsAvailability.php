@@ -43,16 +43,16 @@ class CreateToolsAvailability extends CreateRecord
                         ->columnSpan('full')
                         // ->default(fn() => ToolsAvailability::all()->toArray())
                         ->default([
-                            ['tools' => 'APAR'],
-                            ['tools' => 'APAB'],
-                            ['tools' => 'CCTV'],
-                            ['tools' => 'Genset'],
-                            ['tools' => 'Bahan Bakar Genset'],
-                            ['tools' => 'Assembly Point'],
-                            ['tools' => 'Kotak P3K'],
-                            ['tools' => 'UPS (Uninterruptible Power Supply)'],
-                            ['tools' => 'Nomor Kontak Darurat'],
-                            ['tools' => 'Sistem Alarm Kebakaran'],
+                            ['tools' => 'APAR', 'tools_type' => 0],  // 0 wajib ada
+                            ['tools' => 'APAB', 'tools_type' => 0],
+                            ['tools' => 'CCTV', 'tools_type' => 0],
+                            ['tools' => 'Genset', 'tools_type' => 0],
+                            ['tools' => 'Bahan Bakar Genset', 'tools_type' => 0],
+                            ['tools' => 'Assembly Point', 'tools_type' => 0],
+                            ['tools' => 'Kotak P3K', 'tools_type' => 0],
+                            ['tools' => 'UPS (Uninterruptible Power Supply)', 'tools_type' => 0],
+                            ['tools' => 'Nomor Kontak Darurat', 'tools_type' => 0],
+                            ['tools' => 'Sistem Alarm Kebakaran', 'tools_type' => 0],
                         ]),
                 ]),
             Section::make('Alat Keselamatan 2')
@@ -77,14 +77,14 @@ class CreateToolsAvailability extends CreateRecord
                         ->columnSpan('full')
                         // ->default(fn() => ToolsAvailability::all()->toArray())
                         ->default([
-                            ['tools' => 'Sprinkler'],
-                            ['tools' => 'Petunjuk Evakuasi'],
-                            ['tools' => 'Smoke Detector'],
-                            ['tools' => 'Tangga Darurat'],
-                            ['tools' => 'Hidran'],
-                            ['tools' => 'Trafo'],
-                            ['tools' => 'Heat Detector'],
-                            ['tools' => 'Paging Gedung'],
+                            ['tools' => 'Sprinkler', 'tools_type' => 1],  // 1 tambahan
+                            ['tools' => 'Petunjuk Evakuasi', 'tools_type' => 1],
+                            ['tools' => 'Smoke Detector', 'tools_type' => 1],
+                            ['tools' => 'Tangga Darurat', 'tools_type' => 1],
+                            ['tools' => 'Hidran', 'tools_type' => 1],
+                            ['tools' => 'Trafo', 'tools_type' => 1],
+                            ['tools' => 'Heat Detector', 'tools_type' => 1],
+                            ['tools' => 'Paging Gedung', 'tools_type' => 1],
                         ]),
                 ])
         ]);
@@ -98,9 +98,10 @@ class CreateToolsAvailability extends CreateRecord
 
         $insert = [];
         foreach ($dt as $row) {
-            if ($row['is_available'] == true) {
-                $insert[] = $row;
+            if ($row['is_available'] == false) {
+                $row['amount'] = 0;
             }
+            $insert[] = $row;
         }
 
         $final = [];
@@ -108,6 +109,7 @@ class CreateToolsAvailability extends CreateRecord
             array_push($final, [
                 'bcm_building_assignment_code' => 'JSR/01/25032025/PAV-01',  // TODO
                 'tools' => $row['tools'],
+                'tools_type' => $row['tools_type'],
                 'is_available' => $row['is_available'],
                 'amount' => $row['amount'],
                 'created_at' => now(),

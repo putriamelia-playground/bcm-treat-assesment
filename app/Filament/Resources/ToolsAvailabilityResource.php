@@ -25,7 +25,7 @@ class ToolsAvailabilityResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'Settings';
+    protected static ?string $navigationGroup = 'Assessment';
 
     protected static ?string $navigationLabel = 'Daftar Ketersediaan Alat';
 
@@ -47,10 +47,20 @@ class ToolsAvailabilityResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('bcm_building_assignment_code')
-                    ->label('Kode Assesment'),
+                // TextColumn::make('bcm_building_assignment_code')
+                //     ->label('Kode Assesment'),
                 TextColumn::make('tools')
                     ->label('Alat')
+                    ->alignment('center'),
+                TextColumn::make('tools_type')
+                    ->label('Jenis Alat')
+                    ->formatStateUsing(function (string $state) {
+                        if ($state == 0) {
+                            return 'Peralatan Wajib Ada';
+                        } else {
+                            return 'Tambahan';
+                        }
+                    })
                     ->alignment('center'),
                 IconColumn::make('is_available')
                     ->boolean()

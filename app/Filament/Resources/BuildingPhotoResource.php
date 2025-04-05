@@ -41,7 +41,9 @@ class BuildingPhotoResource extends Resource
                     ->label('Alamat Gedung')
                     ->required()
                     ->maxLength(255)
-                    ->columnSpan('1'),
+                    // ->columnSpan('full')
+                    ->rows(5)
+                    ->cols(5),
                 FileUpload::make('front_building_photo')
                     ->image()
                     ->label('Lokasi Depan Gedung'),

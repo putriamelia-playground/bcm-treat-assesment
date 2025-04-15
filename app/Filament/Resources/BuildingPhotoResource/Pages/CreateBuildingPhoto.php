@@ -10,15 +10,21 @@ class CreateBuildingPhoto extends CreateRecord
 {
     protected static string $resource = BuildingPhotoResource::class;
 
-    protected function mutateFormDataBeforeCreate(array $data): array
-    {
-        $data['bcm_building_assignment_code'] = 'JSR/01/25032025/PAV-01';
+    // protected function mutateFormDataBeforeCreate(array $data): array
+    // {
+    //     $data['bcm_building_assignment_code'] = 'JSR/01/25032025/PAV-01';
 
-        return $data;
-    }
+    //     return $data;
+    // }
 
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
+    }
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['bcm_assessment_code'] = auth()->user()->current_assessment_code;
+        return $data;
     }
 }

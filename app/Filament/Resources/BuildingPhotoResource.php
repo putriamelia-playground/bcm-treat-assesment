@@ -4,8 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\BuildingPhotoResource\Pages;
 use App\Filament\Resources\BuildingPhotoResource\RelationManagers;
+use App\Filament\Resources\CompanydataResource\Widgets\CurentCodeInfo;
+use App\Filament\Traits\CodeGlobalWidgets;
+use App\Models\AssessmentCode;
 use App\Models\BuildingPhoto;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextArea;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -20,6 +24,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class BuildingPhotoResource extends Resource
 {
     protected static ?string $model = BuildingPhoto::class;
+
+    use CodeGlobalWidgets;
 
     protected static ?string $navigationIcon = 'heroicon-o-building-library';
 
@@ -37,6 +43,24 @@ class BuildingPhotoResource extends Resource
     {
         return $form
             ->schema([
+                Select::make('bcm_assessment_code')
+                    // ->relationship(
+                    //     name: 'codeAssessment',
+                    //     titleAttribute: 'assignment_code',
+                    //     modifyQueryUsing: fn(Builder $query) => $query->where('assignment_code', auth()->user()->current_assessment_code),
+                    // ),
+                    // ->default('ap'),
+                    // ->options([
+                    //     'draft' => 'Draft',
+                    //     'reviewing' => 'Reviewing',
+                    //     'published' => 'Published',
+                    // ])
+                    // ->default('draft'),
+                    // ->options(fn() => AssessmentCode::where('assignment_code', auth()->user()->current_assessment_code)->pluck('assignment_code', 'user_id'))
+                    ->options(fn() => AssessmentCode::pluck('assignment_code', 'user_id'))
+                    ->default(auth()->user()->id)
+                    ->disabled()
+                    ->dehydrated(false),  // don't auto save
                 TextArea::make('building_address')
                     ->label('Alamat Gedung')
                     ->required()
@@ -65,7 +89,7 @@ class BuildingPhotoResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('bcm_building_assignment_code')
+                TextColumn::make('bcm_assessment_code')
                     ->label('Kode Assesment'),
                 ImageColumn::make('front_building_photo')
                     ->square(),
@@ -98,5 +122,16 @@ class BuildingPhotoResource extends Resource
             'create' => Pages\CreateBuildingPhoto::route('/create'),
             'edit' => Pages\EditBuildingPhoto::route('/{record}/edit'),
         ];
+    }
+
+    public static function getWidgets(): array
+    {
+        // return [
+        //     CurentCodeInfo::class,
+        // ];
+
+        return array_merge(parent::getWidgets(), [
+            CurentCodeInfo::class,
+        ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\CompanyDataResource\Pages;
 
 use App\Filament\Resources\CompanyDataResource;
+use App\Models\AssessmentCode;
 use App\Models\ToolsAvailability;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Actions;
@@ -14,7 +15,7 @@ class CreateCompanyData extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['building_assignment_code'] = 'JSR/01/25032025/PAV-01';
+        $data['bcm_assessment_code'] = 'JSR/01/25032025/PAV-01';
 
         return $data;
     }
@@ -24,15 +25,15 @@ class CreateCompanyData extends CreateRecord
         return $this->getResource()::getUrl('index');
     }
 
-    // protected function handleRecordCreation(array $data): Model
-    // {
-    //     $result = static::getModel()::create($data);
+    protected function handleRecordCreation(array $data): Model
+    {
+        $result = static::getModel()::create($data);
 
-    //     $data = new ToolsAvailability;
-    //     $data->bcm_building_assignment_code = $result->building_assignment_code;
-    //     $data->save();
+        $data = new AssessmentCode;
+        $data->user_id = auth()->id();
+        $data->assignment_code = $result->bcm_assessment_code;
+        $data->save();
 
-    //     // dd($result->building_assignment_code);
-    //     return $result;
-    // }
+        return $result;
+    }
 }

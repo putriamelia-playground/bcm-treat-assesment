@@ -22,9 +22,9 @@ class RegulationResource extends Resource
 {
     protected static ?string $model = Regulation::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
-    protected static ?string $navigationGroup = 'Assessment';
+    protected static ?string $navigationGroup = 'Information';
 
     protected static ?string $navigationLabel = 'Daftar Regulasi';
 

@@ -3,15 +3,16 @@
 namespace App\Filament\Resources\ToolsAvailabilityResource\Pages;
 
 use App\Filament\Resources\ToolsAvailabilityResource;
+use App\Models\AssessmentCode;
 use App\Models\ToolsAvailability;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Actions;
-use DB;
 
 class CreateToolsAvailability extends CreateRecord
 {
@@ -22,6 +23,14 @@ class CreateToolsAvailability extends CreateRecord
     public function form(Form $form): Form
     {
         return $form->schema([
+            Section::make('Kode Assessment')
+                ->schema([
+                    Select::make('bcm_assessment_code')
+                        ->label('')
+                        ->options(fn() => AssessmentCode::pluck('assignment_code', 'user_id'))
+                        ->default(auth()->user()->id)
+                        ->disabled(),
+                ]),
             Section::make('Alat Keselamatan')
                 ->schema([
                     Repeater::make('tools_with_amount')
@@ -107,7 +116,7 @@ class CreateToolsAvailability extends CreateRecord
         $final = [];
         foreach ($insert as $row) {
             array_push($final, [
-                'bcm_building_assignment_code' => 'JSR/01/25032025/PAV-01',  // TODO
+                'bcm_assessment_code' => auth()->user()->current_assessment_code,  // TODO
                 'tools' => $row['tools'],
                 'tools_type' => $row['tools_type'],
                 'is_available' => $row['is_available'],

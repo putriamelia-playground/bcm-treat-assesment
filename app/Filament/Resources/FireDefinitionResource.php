@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\DefinitionResource\Pages;
-use App\Filament\Resources\DefinitionResource\RelationManagers;
-use App\Models\Definition;
+use App\Filament\Resources\FireDefinitionResource\Pages;
+use App\Filament\Resources\FireDefinitionResource\RelationManagers;
+use App\Models\FireDefinition;
 use Filament\Forms\Components\TextArea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -16,32 +16,32 @@ use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class DefinitionResource extends Resource
+class FireDefinitionResource extends Resource
 {
-    protected static ?string $model = Definition::class;
+    protected static ?string $model = FireDefinition::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
     protected static ?string $navigationGroup = 'Information';
 
-    protected static ?string $navigationLabel = 'Daftar Definisi';
+    protected static ?string $navigationLabel = 'Daftar Definisi Kebakaran';
 
-    protected static ?string $breadcrumb = 'Daftar Definisi';
+    protected static ?string $breadcrumb = 'Daftar Definisi Kebakaran';
 
-    protected static ?string $pluralModelLabel = 'Daftar Definisi';
+    protected static ?string $pluralModelLabel = 'Daftar Definisi Kebakaran';
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 7;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('definition_object_name')
-                    ->label('Objek Definisi')
+                TextInput::make('fire_definition_object_name')
+                    ->label('Objek Definisi Kebakaran')
                     ->required()
                     ->maxLength(255),
-                TextArea::make('definition_value')
-                    ->label('Definisi')
+                TextArea::make('fire_definition_value')
+                    ->label('Definisi Kebakaran')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -51,9 +51,9 @@ class DefinitionResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('definition_object_name')
+                TextColumn::make('fire_definition_object_name')
                     ->label('Objek Definisi'),
-                TextColumn::make('definition_value')
+                TextColumn::make('fire_definition_value')
                     ->label('Definisi')
                     ->wrap(),
             ])
@@ -80,9 +80,9 @@ class DefinitionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListDefinitions::route('/'),
-            'create' => Pages\CreateDefinition::route('/create'),
-            'edit' => Pages\EditDefinition::route('/{record}/edit'),
+            'index' => Pages\ListFireDefinitions::route('/'),
+            'create' => Pages\CreateFireDefinition::route('/create'),
+            'edit' => Pages\EditFireDefinition::route('/{record}/edit'),
         ];
     }
 }

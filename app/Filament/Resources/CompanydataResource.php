@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\CompanydataResource\Widgets\CurentCodeInfo;
 use App\Filament\Resources\CompanyDataResource\Pages;
 use App\Filament\Resources\CompanyDataResource\RelationManagers;
+use App\Models\AssessmentCode;
 use App\Models\CompanyData;
 use App\Models\OwnershipStatus;
 use Filament\Forms\Components\Section;
@@ -24,7 +26,7 @@ class CompanyDataResource extends Resource
 
     protected static ?string $navigationGroup = 'Assessment';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-document';
 
     protected static ?string $navigationLabel = 'Data Perusahaan';
 
@@ -85,7 +87,7 @@ class CompanyDataResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('building_assignment_code')
+                TextColumn::make('bcm_assessment_code')
                     ->label('Kode Assesment'),
                 TextColumn::make('company_name')
                     ->label('Perusahaan'),
@@ -100,6 +102,9 @@ class CompanyDataResource extends Resource
                 TextColumn::make('bulding_resident')
                     ->label('Jumlah Penghuni'),
             ])
+            ->modifyQueryUsing(function (Builder $query) {
+                return $query->where('bcm_assessment_code', auth()->user()->current_assessment_code);
+            })
             ->filters([
                 //
             ])
@@ -124,6 +129,13 @@ class CompanyDataResource extends Resource
             'index' => Pages\ListCompanyDatas::route('/'),
             'create' => Pages\CreateCompanyData::route('/create'),
             'edit' => Pages\EditCompanyData::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            CurentCodeInfo::class,
         ];
     }
 }

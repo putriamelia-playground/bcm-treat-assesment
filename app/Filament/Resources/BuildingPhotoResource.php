@@ -97,8 +97,23 @@ class BuildingPhotoResource extends Resource
                 TextColumn::make('bcm_assessment_code')
                     ->label('Kode Assesment'),
                 ImageColumn::make('front_building_photo')
+                    ->label('Lokasi Depan')
                     ->square(),
-                ImageColumn::make('entrance_building_photo')->square(),
+                ImageColumn::make('entrance_building_photo')
+                    ->label('Pintu Masuk')
+                    ->square(),
+                ImageColumn::make('exit_building_photo')
+                    ->label('Pintu Keluar')
+                    ->square(),
+                ImageColumn::make('leftside_building_photo')
+                    ->label('Lokasi Sisi Kiri')
+                    ->square(),
+                ImageColumn::make('rightside_building_photo')
+                    ->label('Lokasi Sisi Kanan')
+                    ->square(),
+                ImageColumn::make('behind_building_photo')
+                    ->label('Lokasi Belakang')
+                    ->square(),
             ])
             ->filters([
                 //

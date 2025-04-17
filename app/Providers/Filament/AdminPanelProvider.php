@@ -38,6 +38,9 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
+            ->brandLogo(asset('images/logo-BCM.png'))
+            ->brandLogoHeight('4rem')
+            ->favicon(asset('images/logo-BCM-square.png'))
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,

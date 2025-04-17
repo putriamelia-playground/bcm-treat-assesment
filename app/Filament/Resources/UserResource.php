@@ -35,7 +35,22 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('name')
+                    ->label('Nama User')
+                    ->required()
+                    ->maxLength(255),
+                TextInput::make('email')
+                    ->label('Email')
+                    ->required()
+                    ->maxLength(255),
+                TextInput::make('assessor_company')
+                    ->label('Perusahaan Assessor')
+                    ->required()
+                    ->maxLength(255),
+                TextInput::make('assessor_company_code')
+                    ->label('Perusahaan Assessor Kode')
+                    ->required()
+                    ->maxLength(255),
             ]);
     }
 
@@ -47,6 +62,10 @@ class UserResource extends Resource
                     ->label('Nama'),
                 TextColumn::make('email')
                     ->label('Email'),
+                TextColumn::make('assessor_company')
+                    ->label('Perusahaan Assessor'),
+                TextColumn::make('assessor_company_code')
+                    ->label('Perusahaan Assessor Kode'),
             ])
             ->filters([
                 //

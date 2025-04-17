@@ -4,7 +4,9 @@ namespace App\Filament\Resources\CompanyDataResource\Pages;
 
 use App\Filament\Resources\CompanyDataResource;
 use App\Models\AssessmentCode;
+use App\Models\CompanyData;
 use App\Models\ToolsAvailability;
+use Carbon\Carbon;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Actions;
 use Illuminate\Database\Eloquent\Model;
@@ -15,7 +17,14 @@ class CreateCompanyData extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['bcm_assessment_code'] = 'JSR/01/25032025/PAV-01';
+        $code01 = auth()->user()->assessor_company_code;
+        $code02 = CompanyData::count() + 1;
+        $code03date = Carbon::now()->format('d');
+        $code03month = Carbon::now()->format('m');
+        $code04 = Carbon::now()->format('Y');
+
+        $finalAssessmentCode = $code01 . '/' . $code02 . '/' . $code03date . '-' . $code03month . '/' . $code04;
+        $data['bcm_assessment_code'] = $finalAssessmentCode;
 
         return $data;
     }

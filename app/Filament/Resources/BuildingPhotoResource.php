@@ -72,14 +72,19 @@ class BuildingPhotoResource extends Resource
                     ->image()
                     ->label('Lokasi Depan Gedung'),
                 FileUpload::make('entrance_building_photo')
+                    ->image()
                     ->label('Pintu Masuk'),
                 FileUpload::make('exit_building_photo')
+                    ->image()
                     ->label('Pintu Keluar'),
                 FileUpload::make('leftside_building_photo')
+                    ->image()
                     ->label('Lokasi Sisi Kiri Gedung'),
                 FileUpload::make('rightside_building_photo')
+                    ->image()
                     ->label('Lokasi Sisi Kanan Gedung'),
                 FileUpload::make('behind_building_photo')
+                    ->image()
                     ->label('Lokasi Belakang Gedung'),
             ])
             ->columns(2);

@@ -15,11 +15,11 @@ class CurentCodeInfo extends Widget
     {
         $data = CompanyData::where('bcm_assessment_code', auth()->user()->current_assessment_code)->first();
 
-        $this->widgetData = [
-            'company_name' => $data->company_name,
-            'building_name' => $data->building_name,
-            'build_year' => $data->build_year,
-            'use_year' => $data->use_year,
-        ];
+        // $this->widgetData = [
+        //     'company_name' => $data->company_name ?? '',
+        //     'building_name' => $data->building_name ?? '',
+        //     'build_year' => $data->build_year ?? '',
+        //     'use_year' => $data->use_year ?? '',
+        // ];
     }
 }

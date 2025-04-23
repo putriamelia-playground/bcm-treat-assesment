@@ -4,10 +4,14 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ChecklistSafetyResource\Pages;
 use App\Filament\Resources\ChecklistSafetyResource\RelationManagers;
+use App\Filament\Resources\ApabResource;
+use App\Filament\Resources\AparResource;
+use App\Filament\Resources\CompanyDataResource;
 use App\Models\ChecklistSafety;
 use App\Models\ToolsAvailability;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\Layout\Grid;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
@@ -45,61 +49,52 @@ class ChecklistSafetyResource extends Resource
     {
         $livewire = $table->getLivewire();
         return $table
-            // ->columns([
-            //     TextColumn::make('amount')
-            //         ->icon('heroicon-m-phone'),
-            //     TextColumn::make('tools')
-            //         ->icon('heroicon-m-envelope'),
-            // ])
-            // ->filters([
-            //     //
-            // ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            // ->bulkActions([
-            //     Tables\Actions\BulkActionGroup::make([
-            //         Tables\Actions\DeleteBulkAction::make(),
-            //     ]),
-            // ])
-            ->columns(
-                $livewire->isGridLayout()
-                    ? static::getGridTableColumns()
-                    : static::getListTableColumns()
+            // ->recordClasses(fn(ToolsAvailability $record) => match ($record->tools) {
+            //     'APAR' => 'opacity-30',
+            //     'APAB' => 'border-s-2 border-orange-600 dark:border-orange-300',
+            //     // 'published' => 'border-s-2 border-green-600 dark:border-green-300',
+            //     default => null,
+            // })
+            ->recordUrl(
+                false
             )
+            ->actions([
+                // Tables\Actions\EditAction::make(),
+                Action::make('Detail')
+                    ->url(function ($record) {  //  TODO, pake condition supaya dynamic jangan static
+                        switch ($record->tools) {
+                            case 'APAR':
+                                return AparResource::getUrl('create');
+
+                            case 'APAB':
+                                return ApabResource::getUrl('create');;
+
+                            default:
+                                return null;  // or null if you want to disable the link
+                        }
+                    })
+                    ->hidden(fn($record) => $record->amount === '0')
+                    ->color('danger')
+            ])
+            ->columns([
+                Stack::make([
+                    TextColumn::make('amount')
+                        ->icon('heroicon-m-hashtag'),
+                    TextColumn::make('tools')
+                        ->icon('heroicon-m-wrench')
+                        ->searchable(),
+                ])->space(3)->extraAttributes([
+                    'class' => 'pb-2',
+                ]),
+            ])
             ->contentGrid(
-                fn() => $livewire->isListLayout()
-                    ? null
-                    : [
-                        'md' => 2,
-                        'lg' => 3,
-                        'xl' => 4,
-                    ]
-            );
-    }
-
-    public static function getListTableColumns(): array
-    {
-        return [
-            Stack::make([
-                TextColumn::make('amount')
-                    ->icon('heroicon-m-phone'),
-                TextColumn::make('tools')
-                    ->icon('heroicon-m-envelope'),
-            ]),
-        ];
-    }
-
-    public static function getGridTableColumns(): array
-    {
-        return [
-            Stack::make([
-                TextColumn::make('amount')
-                    ->icon('heroicon-m-phone'),
-                TextColumn::make('tools')
-                    ->icon('heroicon-m-envelope'),
-            ]),
-        ];
+                [
+                    'md' => 2,
+                    'lg' => 3,
+                    'xl' => 4,
+                ]
+            )
+            ->paginated(false);
     }
 
     public static function getRelations(): array

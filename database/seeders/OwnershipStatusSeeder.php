@@ -27,6 +27,6 @@ class OwnershipStatusSeeder extends Seeder
             ],
         ];
 
-        \DB::table('bcm_building_ownership_statuses')->insert($data);
+        OwnershipStatus::insert($data);
     }
 }

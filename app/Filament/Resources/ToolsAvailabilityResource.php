@@ -47,8 +47,8 @@ class ToolsAvailabilityResource extends Resource
     {
         return $table
             ->columns([
-                // TextColumn::make('bcm_building_assignment_code')
-                //     ->label('Kode Assesment'),
+                TextColumn::make('bcm_assessment_code')
+                    ->label('Kode Assesment'),
                 TextColumn::make('tools')
                     ->label('Alat')
                     ->alignment('center'),

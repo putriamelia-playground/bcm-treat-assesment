@@ -10,11 +10,13 @@ use App\Filament\Resources\CompanyDataResource;
 use App\Models\ChecklistSafety;
 use App\Models\ToolsAvailability;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Section;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\Layout\Grid;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Filament\Forms;
 use Filament\Tables;
@@ -58,6 +60,17 @@ class ChecklistSafetyResource extends Resource
             ->recordUrl(
                 false
             )
+            // ->groups([
+            //     Group::make('is_available')
+            //         ->label('Status')
+            //         ->getKeyFromRecordUsing(fn($value) => match ($value) {
+            //             1 => 'Pending Approval',
+            //             0 => 'Approved Request',
+            //             // 'rejected' => 'Rejected Submission',
+            //             default => ucfirst($value),
+            //         }),
+            // ])
+            ->defaultGroup('is_available')
             ->actions([
                 // Tables\Actions\EditAction::make(),
                 Action::make('Detail')
@@ -77,6 +90,7 @@ class ChecklistSafetyResource extends Resource
                     ->color('danger')
             ])
             ->columns([
+                // Section::make([
                 Stack::make([
                     TextColumn::make('amount')
                         ->icon('heroicon-m-hashtag'),
@@ -86,6 +100,7 @@ class ChecklistSafetyResource extends Resource
                 ])->space(3)->extraAttributes([
                     'class' => 'pb-2',
                 ]),
+                // ])
             ])
             ->contentGrid(
                 [

@@ -39,21 +39,27 @@ class CreateBuildingSafetyStructure extends CreateRecord
                             Select::make('building_floor')
                                 ->label('Lantai')
                                 ->options(function () {
-                                    $start = 1;
-                                    $processEnd = CompanyData::where('bcm_assessment_code', auth()->user()->current_assessment_code)->select('building_floor')->first();
-                                    $end = $processEnd->building_floor;
+                                    $startFloor = 1;
+                                    $processEndFloor = CompanyData::where('bcm_assessment_code', auth()->user()->current_assessment_code)->select('building_floor')->first();
+                                    $endFloor = $processEndFloor->building_floor;
+                                    $buildingFloor = collect(range($startFloor, $endFloor))->mapWithKeys(fn($value) => [$value => 'L' . $value])->toArray();
 
-                                    return collect(range($start, $end))->mapWithKeys(fn($value) => [$value => $value])->toArray();
-                                }),
-                            Select::make('basement_floor')
-                                ->label('Basement')
-                                ->options(function () {
-                                    $start = 1;
-                                    $processEnd = CompanyData::where('bcm_assessment_code', auth()->user()->current_assessment_code)->select('building_basement')->first();
-                                    $end = $processEnd->building_basement;
+                                    $processEndBasement = CompanyData::where('bcm_assessment_code', auth()->user()->current_assessment_code)->select('building_basement')->first();
 
-                                    return collect(range($start, $end))->mapWithKeys(fn($value) => [$value => $value])->toArray();
-                                }),
+                                    $basementFloor = [];
+                                    if ($processEndBasement->building_basement == 0) {
+                                        $basementFloor = [];
+                                    } else {
+                                        $startBasement = 1;
+                                        $endBasement = $processEndBasement->building_basement;
+                                        $basementFloor = collect(range($startBasement, $endBasement))->mapWithKeys(fn($value) => [$value => 'B' . $value])->toArray();
+                                    }
+
+                                    $final = array_merge($buildingFloor, $basementFloor);
+
+                                    return $final;
+                                })
+                                ->dehydrateStateUsing(fn($state, $record, $component) => $component->getOptions()[$state] ?? null),
                             TextInput::make('name')
                                 ->label('Nama'),
                             TextInput::make('phone_number')
@@ -81,7 +87,7 @@ class CreateBuildingSafetyStructure extends CreateRecord
         foreach ($get['building_safety_structure'] as $row) {
             array_push($insert, [
                 'bcm_assessment_code' => auth()->user()->current_assessment_code,  // TODO
-                'floor' => $row['floor'],
+                'building_floor' => $row['building_floor'],
                 'status' => $row['status'],
                 'name' => $row['name'],
                 'phone_number' => $row['phone_number'],

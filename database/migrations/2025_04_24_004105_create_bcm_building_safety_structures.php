@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->id();
             $table->string('bcm_assessment_code');
             $table->string('building_floor');
-            $table->string('basement_floor');
             $table->boolean('status');
             $table->string('name');
             $table->string('phone_number');

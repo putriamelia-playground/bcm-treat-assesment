@@ -10,9 +10,9 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('bcm_apab_types', function (Blueprint $table) {
+        Schema::create('bcm_safety_tools', function (Blueprint $table) {
             $table->id();
-            $table->string('apab_type_name');
+            $table->string('tool_name');
             $table->timestamps();
         });
     }
@@ -22,6 +22,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('bcm_apab_types');
+        Schema::dropIfExists('bcm_safety_tools');
     }
 };

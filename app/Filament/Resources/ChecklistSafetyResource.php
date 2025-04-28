@@ -74,7 +74,7 @@ class ChecklistSafetyResource extends Resource
             ->actions([
                 // Tables\Actions\EditAction::make(),
                 Action::make('Detail')
-                    ->url(function ($record) {  //  TODO, pake condition supaya dynamic jangan static
+                    ->url(function ($record) {
                         switch ($record->tools) {
                             case 'APAR':
                                 return AparResource::getUrl('create');

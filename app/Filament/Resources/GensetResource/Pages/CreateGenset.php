@@ -1,32 +1,27 @@
 <?php
 
-namespace App\Filament\Resources\AparResource\Pages;
+namespace App\Filament\Resources\GensetResource\Pages;
 
-use App\Filament\Resources\AparResource;
-use App\Models\AparTool;
-use App\Models\AparType;
+use App\Filament\Resources\GensetResource;
 use App\Models\ChecklistAnswer;
 use App\Models\ChecklistItem;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Radio;
-use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Actions;
 
-class CreateApar extends CreateRecord
+class CreateGenset extends CreateRecord
 {
-    protected static string $resource = AparResource::class;
+    protected static string $resource = GensetResource::class;
 
-    protected static string $view = 'filament.resources.apar-resource.pages.form-apar';
+    protected static string $view = 'filament.resources.genset-resource.pages.form-genset';
 
     public function form(Form $form): Form
     {
-        $questions = ChecklistItem::where('safety_tool_id', 2)->get();  // TODO static id
+        $questions = ChecklistItem::where('safety_tool_id', 4)->get();  // TODO static id
 
         $questionFields = $questions->map(function ($question) {
             return Fieldset::make('')

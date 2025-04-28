@@ -7,6 +7,8 @@ use App\Filament\Resources\ChecklistSafetyResource\RelationManagers;
 use App\Filament\Resources\ApabResource;
 use App\Filament\Resources\AparResource;
 use App\Filament\Resources\CompanyDataResource;
+use App\Filament\Resources\GensetResource;
+use App\Filament\Resources\HidranResource;
 use App\Models\ChecklistSafety;
 use App\Models\ToolsAvailability;
 use Filament\Forms\Form;
@@ -22,6 +24,7 @@ use Filament\Forms;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class ChecklistSafetyResource extends Resource
 {
@@ -31,11 +34,11 @@ class ChecklistSafetyResource extends Resource
 
     protected static ?string $navigationGroup = 'Assessment';
 
-    protected static ?string $navigationLabel = 'Data Checklist Peralatan Keselamatan';
+    protected static ?string $navigationLabel = 'Checklist Standar Sarana Keselamatan';
 
-    protected static ?string $breadcrumb = 'Data Checklist Peralatan Keselamatan';
+    protected static ?string $breadcrumb = 'Checklist Standar Sarana Keselamatan';
 
-    protected static ?string $pluralModelLabel = 'Data Checklist Peralatan Keselamatan';
+    protected static ?string $pluralModelLabel = 'Checklist Standar Sarana Keselamatan';
 
     protected static ?int $navigationSort = 4;
 
@@ -60,33 +63,69 @@ class ChecklistSafetyResource extends Resource
             ->recordUrl(
                 false
             )
-            // ->groups([
-            //     Group::make('is_available')
-            //         ->label('Status')
-            //         ->getKeyFromRecordUsing(fn($value) => match ($value) {
-            //             1 => 'Pending Approval',
-            //             0 => 'Approved Request',
-            //             // 'rejected' => 'Rejected Submission',
-            //             default => ucfirst($value),
-            //         }),
-            // ])
-            ->defaultGroup('is_available')
+            ->groups([
+                Group::make('tools_type')
+                    ->label('Jenis Alat')
+                    ->getTitleFromRecordUsing(fn($record) => $record->tools_type ? 'Wajib' : 'Tambahan'),
+            ])
+            ->defaultGroup('tools_type')  // TODO
             ->actions([
                 // Tables\Actions\EditAction::make(),
-                Action::make('Detail')
+                Action::make('Tambah Detail')
                     ->url(function ($record) {
-                        switch ($record->tools) {
+                        // dd($record);
+                        switch ($record->tools) {  // TODO use dynamic syntax
                             case 'APAR':
                                 return AparResource::getUrl('create');
-
                             case 'APAB':
-                                return ApabResource::getUrl('create');;
+                                return ApabResource::getUrl('create');
+                            case 'Hidran':
+                                return HidranResource::getUrl('create');
+                            case 'Sprinkler':
+                                return SprinklerResource::getUrl('create');
+                            case 'Genset':
+                                return GensetResource::getUrl('create');
+                            default:
+                                return null;  // or null if you want to disable the link
+                        }
+                    })
+                    // ->url(function ($record) {
+                    //     $resources = [
+                    //         AparResource::class,
+                    //         ApabResource::class,
+                    //     ];
+                    //     $value = 'apab';
+                    //     $data = [];
+                    //     $matchedResource = collect($resources)->first(function ($resource) use ($value) {
+                    //         $prefix = Str::before(class_basename($resource), 'Resource');
+                    //         // $data[] = Str::lower($prefix) === Str::lower($value);
+                    //         $data[] = $resource;
+                    //     });
+                    //     dd($data);
+                    // })
+                    // ->hidden(fn($record) => $record->amount === '0')
+                    ->color('info'),
+                Action::make('Lihat Detail')
+                    ->url(function ($record) {
+                        switch ($record->tools) {  // TODO use dynamic syntax
+                            case 'APAR':
+                                return AparResource::getUrl('index');
+                            case 'APAB':
+                                return ApabResource::getUrl('index');
+                            case 'Hidran':
+                                return HidranResource::getUrl('index');
+
+                            case 'Sprinkler':
+                                return SprinklerResource::getUrl('index');
+
+                            case 'Genset':
+                                return GensetResource::getUrl('index');
 
                             default:
                                 return null;  // or null if you want to disable the link
                         }
                     })
-                    ->hidden(fn($record) => $record->amount === '0')
+                    // ->hidden(fn($record) => $record->amount === '0')
                     ->color('danger')
             ])
             ->columns([

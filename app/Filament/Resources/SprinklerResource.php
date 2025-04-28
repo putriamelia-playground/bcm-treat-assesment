@@ -2,9 +2,8 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ApabResource\Pages;
-use App\Filament\Resources\ApabResource\RelationManagers;
-use App\Models\ApabTool;
+use App\Filament\Resources\SprinklerResource\Pages;
+use App\Filament\Resources\SprinklerResource\RelationManagers;
 use App\Models\ChecklistAnswer;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,11 +14,19 @@ use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class ApabResource extends Resource
+class SprinklerResource extends Resource
 {
     protected static ?string $model = ChecklistAnswer::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $navigationGroup = 'Assessment';
+
+    protected static ?string $navigationLabel = 'Detail Sprinkler';
+
+    protected static ?string $breadcrumb = 'Detail Sprinkler';
+
+    protected static ?string $pluralModelLabel = 'Detail Sprinkler';
 
     protected static bool $shouldRegisterNavigation = false;
 
@@ -60,7 +67,7 @@ class ApabResource extends Resource
                     }),
             ])
             ->modifyQueryUsing(function (Builder $query) {
-                return $query->where('safety_tool_id', 2);  // TODO static safety tool id
+                return $query->where('safety_tool_id', 11);  // TODO static safety tool id
             })
             ->filters([
                 //
@@ -85,9 +92,9 @@ class ApabResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListApabs::route('/'),
-            'create' => Pages\CreateApab::route('/create'),
-            'edit' => Pages\EditApab::route('/{record}/edit'),
+            'index' => Pages\ListSprinklers::route('/'),
+            'create' => Pages\CreateSprinkler::route('/create'),
+            'edit' => Pages\EditSprinkler::route('/{record}/edit'),
         ];
     }
 }

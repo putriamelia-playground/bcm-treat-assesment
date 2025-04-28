@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Filament\Resources\GensetResource\Pages;
+
+use App\Filament\Resources\GensetResource;
+use Filament\Actions;
+use Filament\Resources\Pages\ListRecords;
+
+class ListGensets extends ListRecords
+{
+    protected static string $resource = GensetResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Actions\CreateAction::make(),
+        ];
+    }
+}

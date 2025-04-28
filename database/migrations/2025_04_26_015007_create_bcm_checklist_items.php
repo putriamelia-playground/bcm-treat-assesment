@@ -10,12 +10,10 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('bcm_apab_tools', function (Blueprint $table) {
+        Schema::create('bcm_checklist_items', function (Blueprint $table) {
             $table->id();
-            $table->string('bcm_assessment_code')->nullable();
-            $table->foreignId('apab_type_id')->nullable();
-            $table->string('apab_weight')->nullable();
-            $table->string('amount')->nullable();
+            $table->foreignId('safety_tool_id')->nullable();
+            $table->string('questions');
             $table->timestamps();
         });
     }
@@ -25,6 +23,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('bcm_apab_tools');
+        Schema::dropIfExists('bcm_checklist_items');
     }
 };

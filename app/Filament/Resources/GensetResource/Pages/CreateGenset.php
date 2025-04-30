@@ -21,7 +21,7 @@ class CreateGenset extends CreateRecord
 
     public function form(Form $form): Form
     {
-        $questions = ChecklistItem::where('safety_tool_id', 4)->get();  // TODO static id
+        $questions = ChecklistItem::where('safety_tool_id', 18)->get();  // TODO static id
 
         $questionFields = $questions->map(function ($question) {
             return Fieldset::make('')

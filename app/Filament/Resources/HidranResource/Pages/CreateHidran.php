@@ -22,7 +22,7 @@ class CreateHidran extends CreateRecord
 
     public function form(Form $form): Form
     {
-        $questions = ChecklistItem::where('safety_tool_id', 15)->get();  // TODO static id
+        $questions = ChecklistItem::where('safety_tool_id', 12)->get();  // TODO static id
 
         $questionFields = $questions->map(function ($question) {
             return Fieldset::make('')

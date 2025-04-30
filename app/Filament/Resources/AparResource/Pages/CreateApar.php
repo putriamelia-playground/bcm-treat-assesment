@@ -8,10 +8,12 @@ use App\Models\AparType;
 use App\Models\ChecklistAnswer;
 use App\Models\ChecklistItem;
 use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -26,36 +28,38 @@ class CreateApar extends CreateRecord
 
     public function form(Form $form): Form
     {
-        $questions = ChecklistItem::where('safety_tool_id', 2)->get();  // TODO static id
+        $questions = ChecklistItem::where('safety_tool_id', 15)->get();  // TODO static id
 
         $questionFields = $questions->map(function ($question) {
-            return Fieldset::make('')
+            return Grid::make(2)
                 ->schema([
-                    // Placeholder::make("Checklist_Item_{$question->id}") // TODO do increment number here for every questions with the same id
-                    Placeholder::make('Checklist_Item')
-                        ->content($question->questions)
-                        ->columnSpanFull(),
-                    Radio::make("answers.{$question->id}.condition")
-                        ->label('Condition')
-                        ->options([
-                            true => 'Baik',
-                            false => 'Buruk',
-                        ])
-                        ->inline()
-                        ->required(),
-                    Radio::make("answers.{$question->id}.function")
-                        ->label('Function')
-                        ->options([
-                            true => 'Baik',
-                            false => 'Buruk',
-                        ])
-                        ->inline()
-                        ->required(),
-                    Hidden::make("answers.{$question->id}.safetyToolId")
-                        ->label('id safety tool')
-                        ->default($question->safety_tool_id),
-                ])
-                ->columns(2);
+                    Fieldset::make('')
+                        ->schema([
+                            Grid::make(3)
+                                ->schema([
+                                    // Placeholder::make("Checklist_Item_{$question->id}")  // TODO do increment number here for every questions with the same id
+                                    Placeholder::make('Checklist_Item')
+                                        ->content($question->questions),
+                                    Select::make("answers.{$question->id}.condition")
+                                        ->label('Condition')
+                                        ->options([
+                                            true => 'Baik',
+                                            false => 'Buruk',
+                                        ])
+                                        ->required(),
+                                    Select::make("answers.{$question->id}.function")
+                                        ->label('Function')
+                                        ->options([
+                                            true => 'Baik',
+                                            false => 'Buruk',
+                                        ])
+                                        ->required(),
+                                    Hidden::make("answers.{$question->id}.safetyToolId")
+                                        ->label('id safety tool')
+                                        ->default($question->safety_tool_id),
+                                ])
+                        ]),
+                ]);
         });
 
         return $form

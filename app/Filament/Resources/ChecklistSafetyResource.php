@@ -132,7 +132,7 @@ class ChecklistSafetyResource extends Resource
                 // Section::make([
                 Stack::make([
                     TextColumn::make('amount')
-                        ->icon('heroicon-m-hashtag'),
+                        ->icon('heroicon-m-clipboard-document-check'),
                     TextColumn::make('tools')
                         ->icon('heroicon-m-wrench')
                         ->searchable(),

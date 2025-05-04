@@ -10,14 +10,11 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('bcm_building_safety_structures', function (Blueprint $table) {
+        Schema::create('bcm_building_safety_teams', function (Blueprint $table) {
             $table->id();
-            $table->string('bcm_assessment_code');
-            $table->boolean('location_type');
-            $table->string('building_floor');
+            $table->boolean('location_type');  // pusat 1 cabang 0
+            $table->string('parent_type')->nullable();
             $table->string('status');
-            $table->string('name');
-            $table->string('phone_number');
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('bcm_building_safety_structures');
+        Schema::dropIfExists('bcm_building_safety_teams');
     }
 };

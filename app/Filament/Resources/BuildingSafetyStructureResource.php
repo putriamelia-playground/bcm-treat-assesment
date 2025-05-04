@@ -44,7 +44,7 @@ class BuildingSafetyStructureResource extends Resource
             ->columns([
                 TextColumn::make('bcm_assessment_code')
                     ->label('Kode Assesment'),
-                TextColumn::make('floor')
+                TextColumn::make('building_floor')
                     ->label('Lantai'),
                 TextColumn::make('status')
                     ->label('Status')

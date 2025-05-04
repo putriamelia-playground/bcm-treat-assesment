@@ -5,12 +5,15 @@ namespace App\Filament\Resources\BuildingSafetyStructureResource\Pages;
 use App\Filament\Resources\BuildingSafetyStructureResource;
 use App\Models\AssessmentCode;
 use App\Models\BuildingSafetyStructure;
+use App\Models\BuildingSafetyTeam;
 use App\Models\CompanyData;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Actions;
 
@@ -33,9 +36,19 @@ class CreateBuildingSafetyStructure extends CreateRecord
                 ]),
             Section::make('Deputy and Captain Floor')
                 ->schema([
+                    Select::make('location_type')
+                        ->label('Kantor Cabang atau Pusat?')
+                        ->options([
+                            1 => 'Pusat',
+                            0 => 'Cabang',
+                        ])
+                        ->live()
+                        ->afterStateUpdated(function (Set $set) {
+                            $set('status', null);
+                        }),
                     Repeater::make('building_safety_structure')
                         ->label('Pengisian Deputy dan Captain Floor')
-                        ->schema([
+                        ->schema(fn(Get $get): array => [
                             Select::make('building_floor')
                                 ->label('Lantai')
                                 ->options(function () {
@@ -66,10 +79,12 @@ class CreateBuildingSafetyStructure extends CreateRecord
                                 ->label('No Handphone'),
                             Select::make('status')
                                 ->label('Status')
-                                ->options([
-                                    1 => 'Deputy Floor',
-                                    2 => 'Captain Floor',
-                                ])
+                                ->live()
+                                ->options(function () use ($get) {
+                                    $data = BuildingSafetyTeam::where('location_type', $get('location_type'))->pluck('status', 'id');
+                                    return $data;
+                                })
+                                ->dehydrateStateUsing(fn($state, $record, $component) => $component->getOptions()[$state] ?? null),
                         ])
                         ->deletable(false)
                         ->reorderable(false)
@@ -87,6 +102,7 @@ class CreateBuildingSafetyStructure extends CreateRecord
         foreach ($get['building_safety_structure'] as $row) {
             array_push($insert, [
                 'bcm_assessment_code' => auth()->user()->current_assessment_code,  // TODO
+                'location_type' => $get['location_type'],
                 'building_floor' => $row['building_floor'],
                 'status' => $row['status'],
                 'name' => $row['name'],

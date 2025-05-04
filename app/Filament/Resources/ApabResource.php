@@ -60,7 +60,7 @@ class ApabResource extends Resource
                     }),
             ])
             ->modifyQueryUsing(function (Builder $query) {
-                return $query->where('safety_tool_id', 2);  // TODO static safety tool id
+                return $query->where('safety_tool_id', 16);  // TODO static safety tool id
             })
             ->filters([
                 //

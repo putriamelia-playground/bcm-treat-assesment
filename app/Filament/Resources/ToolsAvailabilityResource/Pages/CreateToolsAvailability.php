@@ -4,6 +4,7 @@ namespace App\Filament\Resources\ToolsAvailabilityResource\Pages;
 
 use App\Filament\Resources\ToolsAvailabilityResource;
 use App\Models\AssessmentCode;
+use App\Models\SafetyTool;
 use App\Models\ToolsAvailability;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
@@ -13,6 +14,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Actions;
+use Icetalker\FilamentTableRepeater\Forms\Components\TableRepeater;
 
 class CreateToolsAvailability extends CreateRecord
 {
@@ -31,84 +33,52 @@ class CreateToolsAvailability extends CreateRecord
                         ->default(auth()->user()->id)
                         ->disabled(),
                 ]),
-            Section::make('Alat Keselamatan')
+            Section::make('Sarana Prasarana Keselamatan')
                 ->schema([
-                    Repeater::make('tools_with_amount')
-                        ->label('')
+                    TableRepeater::make('tools')
                         ->schema([
                             Checkbox::make('is_available')
-                                ->label(fn($state, $get) => __($get('tools')))
-                                ->live()
-                                ->default(false),
+                                ->label('')
+                                ->live(),
+                            TextInput::make('tool_name')
+                                ->label('Tools')
+                                ->nullable()
+                                ->default(fn($state, $get) => __($get('tool_name')))
+                                ->readOnly(),
+                            TextInput::make('jenis_tool')
+                                ->label('Jenis Alat')
+                                ->nullable()
+                                ->default(fn($state, $get) => $get('tool_type') === 1 ? 'Tambahan' : 'Wajib Ada')
+                                ->readOnly(),
                             TextInput::make('amount')
                                 ->label('Jumlah')
                                 ->nullable()
-                                ->disabled(fn($get) => !$get('is_available')),
+                                ->disabled(fn($get) => $get('tool_type') === 1),
+                            TextInput::make('notes')
+                                ->label('Keterangan')
+                                ->nullable(),
                         ])
+                        ->reorderable(false)
                         ->addable(false)
                         ->deletable(false)
-                        ->reorderable(false)
-                        ->grid(3)
                         ->columnSpan('full')
-                        // ->default(fn() => ToolsAvailability::all()->toArray())
-                        ->default([
-                            ['tools' => 'APAR', 'tools_type' => 0],  // 0 wajib ada
-                            ['tools' => 'APAB', 'tools_type' => 0],
-                            ['tools' => 'CCTV', 'tools_type' => 0],
-                            ['tools' => 'Genset', 'tools_type' => 0],
-                            ['tools' => 'Bahan Bakar Genset', 'tools_type' => 0],
-                            ['tools' => 'Assembly Point', 'tools_type' => 0],
-                            ['tools' => 'Kotak P3K', 'tools_type' => 0],
-                            ['tools' => 'UPS (Uninterruptible Power Supply)', 'tools_type' => 0],
-                            ['tools' => 'Nomor Kontak Darurat', 'tools_type' => 0],
-                            ['tools' => 'Sistem Alarm Kebakaran', 'tools_type' => 0],
-                        ]),
+                        ->default(function () {
+                            $data = SafetyTool::select('tool_name', 'tool_type')->get()->toArray();
+
+                            return $data;
+                        }),
                 ]),
-            Section::make('Alat Keselamatan 2')
-                ->schema([
-                    Repeater::make('tools_without_amount')
-                        ->label('')
-                        ->schema([
-                            Checkbox::make('is_available')
-                                ->label(fn($state, $get) => __($get('tools')))
-                                ->live()
-                                ->default(false),
-                            TextInput::make('amount')
-                                ->label('Jumlah')
-                                ->nullable()
-                                ->default('0')
-                                ->hidden(),
-                        ])
-                        ->addable(false)
-                        ->deletable(false)
-                        ->reorderable(false)
-                        ->grid(3)
-                        ->columnSpan('full')
-                        // ->default(fn() => ToolsAvailability::all()->toArray())
-                        ->default([
-                            ['tools' => 'Sprinkler', 'tools_type' => 1],  // 1 tambahan
-                            ['tools' => 'Petunjuk Evakuasi', 'tools_type' => 1],
-                            ['tools' => 'Smoke Detector', 'tools_type' => 1],
-                            ['tools' => 'Tangga Darurat', 'tools_type' => 1],
-                            ['tools' => 'Hidran', 'tools_type' => 1],
-                            ['tools' => 'Trafo', 'tools_type' => 1],
-                            ['tools' => 'Heat Detector', 'tools_type' => 1],
-                            ['tools' => 'Paging Gedung', 'tools_type' => 1],
-                        ]),
-                ])
         ]);
     }
 
     public function save()
     {
-        $get = $this->form->getState();
-
-        $dt = array_merge($get['tools_with_amount'], $get['tools_without_amount']);
+        $get = $this->form->getState()['tools'];
 
         $insert = [];
-        foreach ($dt as $row) {
-            if ($row['is_available'] == false) {
-                $row['amount'] = 0;
+        foreach ($get as $row) {
+            if ($row['tool_type'] == 1) {
+                $row['amount'] = null;
             }
             $insert[] = $row;
         }
@@ -117,10 +87,11 @@ class CreateToolsAvailability extends CreateRecord
         foreach ($insert as $row) {
             array_push($final, [
                 'bcm_assessment_code' => auth()->user()->current_assessment_code,  // TODO
-                'tools' => $row['tools'],
-                'tools_type' => $row['tools_type'],
+                'tools' => $row['tool_name'],
+                'tools_type' => $row['tool_type'],
                 'is_available' => $row['is_available'],
                 'amount' => $row['amount'],
+                'notes' => $row['notes'],
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

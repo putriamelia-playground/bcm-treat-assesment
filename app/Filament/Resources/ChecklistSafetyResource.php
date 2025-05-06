@@ -54,12 +54,6 @@ class ChecklistSafetyResource extends Resource
     {
         $livewire = $table->getLivewire();
         return $table
-            // ->recordClasses(fn(ToolsAvailability $record) => match ($record->tools) {
-            //     'APAR' => 'opacity-30',
-            //     'APAB' => 'border-s-2 border-orange-600 dark:border-orange-300',
-            //     // 'published' => 'border-s-2 border-green-600 dark:border-green-300',
-            //     default => null,
-            // })
             ->recordUrl(
                 false
             )
@@ -70,7 +64,6 @@ class ChecklistSafetyResource extends Resource
             ])
             ->defaultGroup('tools_type')  // TODO
             ->actions([
-                // Tables\Actions\EditAction::make(),
                 Action::make('Tambah Detail')
                     ->url(function ($record) {
                         // dd($record);
@@ -89,21 +82,6 @@ class ChecklistSafetyResource extends Resource
                                 return null;  // or null if you want to disable the link
                         }
                     })
-                    // ->url(function ($record) {
-                    //     $resources = [
-                    //         AparResource::class,
-                    //         ApabResource::class,
-                    //     ];
-                    //     $value = 'apab';
-                    //     $data = [];
-                    //     $matchedResource = collect($resources)->first(function ($resource) use ($value) {
-                    //         $prefix = Str::before(class_basename($resource), 'Resource');
-                    //         // $data[] = Str::lower($prefix) === Str::lower($value);
-                    //         $data[] = $resource;
-                    //     });
-                    //     dd($data);
-                    // })
-                    // ->hidden(fn($record) => $record->amount === '0')
                     ->color('info'),
                 Action::make('Lihat Detail')
                     ->url(function ($record) {
@@ -125,7 +103,6 @@ class ChecklistSafetyResource extends Resource
                                 return null;  // or null if you want to disable the link
                         }
                     })
-                    // ->hidden(fn($record) => $record->amount === '0')
                     ->color('danger')
             ])
             ->columns([

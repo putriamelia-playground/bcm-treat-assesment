@@ -40,7 +40,7 @@ class CreateBuildingSafetyStructure extends CreateRecord
                         ->label('Kantor Cabang atau Pusat?')
                         ->options([
                             1 => 'Pusat',
-                            0 => 'Cabang',
+                            0 => 'Cabang/Kanwil',
                         ])
                         ->live()
                         ->afterStateUpdated(function (Set $set) {

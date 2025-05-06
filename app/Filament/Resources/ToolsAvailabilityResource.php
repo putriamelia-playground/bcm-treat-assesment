@@ -76,6 +76,8 @@ class ToolsAvailabilityResource extends Resource
                         }
                     })
                     ->alignment('center'),
+                TextColumn::make('notes')
+                    ->label('Keterangan')
             ])
             ->filters([
                 //

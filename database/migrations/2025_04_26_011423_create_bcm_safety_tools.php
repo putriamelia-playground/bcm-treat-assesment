@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('bcm_safety_tools', function (Blueprint $table) {
             $table->id();
             $table->string('tool_name');
+            $table->boolean('tool_type');
             $table->timestamps();
         });
     }

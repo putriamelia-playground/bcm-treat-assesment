@@ -22,7 +22,7 @@ class DefinitionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
-    protected static ?string $navigationGroup = 'Information';
+    protected static ?string $navigationGroup = 'Informasi';
 
     protected static ?string $navigationLabel = 'Daftar Definisi';
 

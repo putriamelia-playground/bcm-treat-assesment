@@ -41,14 +41,14 @@ class CreateApar extends CreateRecord
                                     Placeholder::make('Checklist_Item')
                                         ->content($question->questions),
                                     Select::make("answers.{$question->id}.condition")
-                                        ->label('Condition')
+                                        ->label('Kondisi')
                                         ->options([
                                             true => 'Baik',
                                             false => 'Buruk',
                                         ])
                                         ->required(),
                                     Select::make("answers.{$question->id}.function")
-                                        ->label('Function')
+                                        ->label('Fungsi')
                                         ->options([
                                             true => 'Baik',
                                             false => 'Buruk',

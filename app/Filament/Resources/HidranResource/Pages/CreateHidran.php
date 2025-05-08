@@ -32,7 +32,7 @@ class CreateHidran extends CreateRecord
                         ->content($question->questions)
                         ->columnSpanFull(),
                     Radio::make("answers.{$question->id}.condition")
-                        ->label('Condition')
+                        ->label('Kondisi')
                         ->options([
                             true => 'Baik',
                             false => 'Buruk',
@@ -40,7 +40,7 @@ class CreateHidran extends CreateRecord
                         ->inline()
                         ->required(),
                     Radio::make("answers.{$question->id}.function")
-                        ->label('Function')
+                        ->label('Fungsi')
                         ->options([
                             true => 'Baik',
                             false => 'Buruk',

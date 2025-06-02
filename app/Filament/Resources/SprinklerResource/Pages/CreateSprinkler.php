@@ -21,9 +21,11 @@ class CreateSprinkler extends CreateRecord
 
     public function form(Form $form): Form
     {
-        $questions = ChecklistItem::where('safety_tool_id', 10)->get();  // TODO static id
+        // $questions = ChecklistItem::where('safety_tool_id', request()->get('tool_id'))->get();  // TODO static id
+        $questions = ChecklistItem::where('safety_tool_id', 17)->get();  // TODO static id
 
         $questionFields = $questions->map(function ($question) {
+            // dd($question->questions);
             return Fieldset::make('')
                 ->schema([
                     // Placeholder::make("Checklist_Item_{$question->id}") // TODO do increment number here for every questions with the same id
@@ -59,6 +61,7 @@ class CreateSprinkler extends CreateRecord
 
     public function save()
     {
+        // dd($this->form->getState());
         $answers = $this->form->getState()['answers'];
 
         $insert = [];

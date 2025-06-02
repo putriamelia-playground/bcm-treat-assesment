@@ -66,16 +66,21 @@ class ChecklistSafetyResource extends Resource
             ->actions([
                 Action::make('Tambah Detail')
                     ->url(function ($record) {
-                        // dd($record);
                         switch ($record->tools) {  // TODO use dynamic syntax
                             case 'APAR':
-                                return AparResource::getUrl('create');
+                                return route('filament.admin.resources.apars.create', [
+                                    'tool_id' => $record->bcm_safety_tool_id
+                                ]);
                             case 'APAB':
-                                return ApabResource::getUrl('create');
+                                return route('filament.admin.resources.apabs.create', [
+                                    'tool_id' => $record->bcm_safety_tool_id
+                                ]);
                             case 'Hidran':
                                 return HidranResource::getUrl('create');
                             case 'Sprinkler':
-                                return SprinklerResource::getUrl('create');
+                                return route('filament.admin.resources.sprinklers.create', [
+                                    'tool_id' => $record->bcm_safety_tool_id
+                                ]);
                             case 'Genset':
                                 return GensetResource::getUrl('create');
                             default:
@@ -87,14 +92,20 @@ class ChecklistSafetyResource extends Resource
                     ->url(function ($record) {
                         switch ($record->tools) {  // TODO use dynamic syntax
                             case 'APAR':
-                                return AparResource::getUrl('index');
+                                return route('filament.admin.resources.apars.index', [
+                                    'tool_id' => $record->bcm_safety_tool_id
+                                ]);
                             case 'APAB':
-                                return ApabResource::getUrl('index');
+                                return route('filament.admin.resources.apabs.index', [
+                                    'tool_id' => $record->bcm_safety_tool_id
+                                ]);
                             case 'Hidran':
                                 return HidranResource::getUrl('index');
 
                             case 'Sprinkler':
-                                return SprinklerResource::getUrl('index');
+                                return route('filament.admin.resources.sprinklers.index', [
+                                    'tool_id' => $record->bcm_safety_tool_id
+                                ]);
 
                             case 'Genset':
                                 return GensetResource::getUrl('index');

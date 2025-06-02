@@ -3,8 +3,8 @@
 namespace App\Filament\Resources\ApabResource\Pages;
 
 use App\Filament\Resources\ApabResource;
-use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Actions;
 
 class ListApabs extends ListRecords
 {

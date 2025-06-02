@@ -3,8 +3,8 @@
 namespace App\Filament\Resources\AparResource\Pages;
 
 use App\Filament\Resources\AparResource;
-use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Actions;
 
 class ListApars extends ListRecords
 {

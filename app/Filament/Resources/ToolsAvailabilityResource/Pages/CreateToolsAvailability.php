@@ -7,6 +7,7 @@ use App\Models\AssessmentCode;
 use App\Models\SafetyTool;
 use App\Models\ToolsAvailability;
 use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -45,6 +46,9 @@ class CreateToolsAvailability extends CreateRecord
                                 ->nullable()
                                 ->default(fn($state, $get) => __($get('tool_name')))
                                 ->readOnly(),
+                            Hidden::make('id')
+                                ->label('Tools')
+                                ->default(fn($state, $get) => __($get('id'))),
                             TextInput::make('jenis_tool')
                                 ->label('Jenis Alat')
                                 ->nullable()
@@ -63,7 +67,7 @@ class CreateToolsAvailability extends CreateRecord
                         ->deletable(false)
                         ->columnSpan('full')
                         ->default(function () {
-                            $data = SafetyTool::select('tool_name', 'tool_type')->get()->toArray();
+                            $data = SafetyTool::select('id', 'tool_name', 'tool_type')->get()->toArray();
 
                             return $data;
                         }),
@@ -74,6 +78,7 @@ class CreateToolsAvailability extends CreateRecord
     public function save()
     {
         $get = $this->form->getState()['tools'];
+        // dd($get);
 
         $insert = [];
         foreach ($get as $row) {
@@ -87,6 +92,7 @@ class CreateToolsAvailability extends CreateRecord
         foreach ($insert as $row) {
             array_push($final, [
                 'bcm_assessment_code' => auth()->user()->current_assessment_code,  // TODO
+                'bcm_safety_tool_id' => $row['id'],
                 'tools' => $row['tool_name'],
                 'tools_type' => $row['tool_type'],
                 'is_available' => $row['is_available'],

@@ -42,25 +42,13 @@ class ApabResource extends Resource
                     ->wrap(),
                 TextColumn::make('condition_answer')
                     ->label('Kondisi')
-                    ->formatStateUsing(function (string $state) {  // TODO one line aja
-                        if ($state == 1) {
-                            return 'Baik';
-                        } else {
-                            return 'Buruk';
-                        }
-                    }),
+                    ->formatStateUsing(fn(string $state) => $state == 1 ? 'Baik' : 'Buruk'),
                 TextColumn::make('function_answer')
                     ->label('Fungsi')
-                    ->formatStateUsing(function (string $state) {
-                        if ($state == 1) {
-                            return 'Baik';
-                        } else {
-                            return 'Buruk';
-                        }
-                    }),
+                    ->formatStateUsing(fn(string $state) => $state == 1 ? 'Baik' : 'Buruk'),
             ])
             ->modifyQueryUsing(function (Builder $query) {
-                return $query->where('safety_tool_id', 16);  // TODO static safety tool id
+                return $query->where('safety_tool_id', 2);  // TODO static safety tool id
             })
             ->filters([
                 //

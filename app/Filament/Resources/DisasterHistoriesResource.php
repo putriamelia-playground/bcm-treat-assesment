@@ -45,16 +45,8 @@ class DisasterHistoriesResource extends Resource
                     ->default(auth()->user()->id)
                     ->columnSpan('full')
                     ->disabled(),
-                Select::make('disaster_type')
-                    ->label('Jenis Bencana')
-                    ->options([
-                        1 => 'Gempa Bumi',
-                        2 => 'Kebakaran',
-                        3 => 'Banjir',
-                        4 => 'Kebakaran Hutan',
-                        5 => 'Liquid',
-                    ])
-                    ->dehydrateStateUsing(fn($state, $record, $component) => $component->getOptions()[$state] ?? null),
+                TextInput::make('disaster_type')
+                    ->label('Jenis Bencana'),
                 DatePicker::make('disaster_time')
                     ->label('Waktu'),
                 TextInput::make('disaster_impact')

@@ -7,6 +7,7 @@ use App\Models\AparTool;
 use App\Models\AparType;
 use App\Models\ChecklistAnswer;
 use App\Models\ChecklistItem;
+use App\Models\SafetyTool;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
@@ -26,9 +27,26 @@ class CreateApar extends CreateRecord
 
     protected static string $view = 'filament.resources.apar-resource.pages.form-apar';
 
+    public ?int $toolId = null;
+
+    public function mount(): void
+    {
+        $this->toolId = request()->get('tool_id');
+    }
+
     public function form(Form $form): Form
     {
-        $questions = ChecklistItem::where('safety_tool_id', 15)->get();  // TODO static id
+        $questions = ChecklistItem::where('safety_tool_id', $this->toolId)->get();
+        // dd($this->toolId);
+
+        // $data = SafetyTool::where('id', request()->get('tool_id'))->first();
+        // dd($data);
+
+        // $data = request('tool_id');
+        // dd($data);
+
+        // dd(request('tool_id'));
+        // $questions = ChecklistItem::where('safety_tool_id', $data)->get();
 
         $questionFields = $questions->map(function ($question) {
             return Grid::make(2)
@@ -62,19 +80,22 @@ class CreateApar extends CreateRecord
                 ]);
         });
 
+        // dd($questionFields);
         return $form
             ->schema($questionFields->toArray());
     }
 
     public function save()
     {
+        // dd($this->form->getState());
         $answers = $this->form->getState()['answers'];
+        // dd($answers);
 
         $insert = [];
         foreach ($answers as $questionId => $response) {
             array_push($insert, [
                 'user_id' => auth()->user()->id,
-                'safety_tool_id' => $response['safetyToolId'],
+                'safety_tool_id' => $this->toolId,
                 'checklist_item_id' => $questionId,
                 'condition_answer' => $response['condition'],
                 'function_answer' => $response['function'],

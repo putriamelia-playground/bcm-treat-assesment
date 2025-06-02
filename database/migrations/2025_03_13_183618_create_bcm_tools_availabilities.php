@@ -12,10 +12,12 @@ return new class extends Migration {
     {
         Schema::create('bcm_tools_availabilities', function (Blueprint $table) {
             $table->id();
-            $table->string('bcm_building_assignment_code');
+            $table->string('bcm_assessment_code');
+            $table->foreignId('bcm_safety_tool_id')->nullable()->index();
             $table->string('tools');
             $table->string('tools_type');
             $table->boolean('is_available')->nullable();
+            $table->string('notes')->nullable();
             $table->string('amount')->nullable();
             $table->timestamps();
         });

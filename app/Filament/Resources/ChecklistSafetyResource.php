@@ -60,7 +60,7 @@ class ChecklistSafetyResource extends Resource
             ->groups([
                 Group::make('tools_type')
                     ->label('Jenis Alat')
-                    ->getTitleFromRecordUsing(fn($record) => $record->tools_type ? 'Wajib' : 'Tambahan'),
+                    ->getTitleFromRecordUsing(fn($record) => $record->tools_type ? 'Tambahan' : 'Wajib'),
             ])
             ->defaultGroup('tools_type')  // TODO
             ->actions([
@@ -87,7 +87,8 @@ class ChecklistSafetyResource extends Resource
                                 return null;  // or null if you want to disable the link
                         }
                     })
-                    ->color('info'),
+                    ->color('info')
+                    ->disabled(fn($record) => $record->is_available == 0),
                 Action::make('Lihat Detail')
                     ->url(function ($record) {
                         switch ($record->tools) {  // TODO use dynamic syntax
@@ -115,6 +116,7 @@ class ChecklistSafetyResource extends Resource
                         }
                     })
                     ->color('danger')
+                    ->disabled(fn($record) => $record->is_available == 0),
             ])
             ->columns([
                 // Section::make([

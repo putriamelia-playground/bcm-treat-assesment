@@ -39,8 +39,7 @@ class CreateToolsAvailability extends CreateRecord
                     TableRepeater::make('tools')
                         ->schema([
                             Checkbox::make('is_available')
-                                ->label('')
-                                ->live(),
+                                ->label(''),
                             TextInput::make('tool_name')
                                 ->label('Tools')
                                 ->nullable()

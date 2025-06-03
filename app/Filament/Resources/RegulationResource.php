@@ -59,10 +59,6 @@ class RegulationResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            // ->groups([
-            //     Group::make('regulationType.regulation_type_name')
-            //         ->titlePrefixedWithLabel(false),
-            // ])
             ->defaultGroup('regulationType.regulation_type_name')
             ->columns([
                 TextColumn::make('regulation_value')

@@ -44,17 +44,13 @@ class BuildingSafetyStructureResource extends Resource
             ->columns([
                 TextColumn::make('bcm_assessment_code')
                     ->label('Kode Assesment'),
+                TextColumn::make('location_type')
+                    ->label('Kode Assesment')
+                    ->formatStateUsing(fn(string $state) => $state == 1 ? 'Pusat' : 'Cabang/Kanwil'),
                 TextColumn::make('building_floor')
                     ->label('Lantai'),
                 TextColumn::make('status')
-                    ->label('Status')
-                    ->formatStateUsing(function (string $state) {
-                        if ($state == 0) {
-                            return 'Peralatan Wajib Ada';
-                        } else {
-                            return 'Tambahan';
-                        }
-                    }),
+                    ->label('Status'),
                 TextColumn::make('name')
                     ->label('Nama'),
                 TextColumn::make('phone_number')

@@ -24,9 +24,16 @@ class CreateApab extends CreateRecord
 
     protected static string $view = 'filament.resources.apab-resource.pages.form-apab';
 
+    public ?int $toolId = null;
+
+    public function mount(): void
+    {
+        $this->toolId = request()->get('tool_id');
+    }
+
     public function form(Form $form): Form
     {
-        $questions = ChecklistItem::where('safety_tool_id', 16)->get();  // TODO static id
+        $questions = ChecklistItem::where('safety_tool_id', $this->toolId)->get();
 
         $questionFields = $questions->map(function ($question) {
             return Grid::make(2)
@@ -72,7 +79,7 @@ class CreateApab extends CreateRecord
         foreach ($answers as $questionId => $response) {
             array_push($insert, [
                 'user_id' => auth()->user()->id,
-                'safety_tool_id' => $response['safetyToolId'],
+                'safety_tool_id' => $this->toolId,
                 'checklist_item_id' => $questionId,
                 'condition_answer' => $response['condition'],
                 'function_answer' => $response['function'],
@@ -83,6 +90,6 @@ class CreateApab extends CreateRecord
 
         ChecklistAnswer::insert($insert);
 
-        return redirect()->to('admin/checklist-safeties');
+        return redirect()->to('admin/apabs?tool_id=' . $this->toolId);
     }
 }

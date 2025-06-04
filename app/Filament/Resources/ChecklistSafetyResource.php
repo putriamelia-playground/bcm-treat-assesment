@@ -76,13 +76,17 @@ class ChecklistSafetyResource extends Resource
                                     'tool_id' => $record->bcm_safety_tool_id
                                 ]);
                             case 'Hidran':
-                                return HidranResource::getUrl('create');
+                                return route('filament.admin.resources.hidrans.create', [
+                                    'tool_id' => $record->bcm_safety_tool_id
+                                ]);
                             case 'Sprinkler':
                                 return route('filament.admin.resources.sprinklers.create', [
                                     'tool_id' => $record->bcm_safety_tool_id
                                 ]);
                             case 'Genset':
-                                return GensetResource::getUrl('create');
+                                return route('filament.admin.resources.gensets.create', [
+                                    'tool_id' => $record->bcm_safety_tool_id
+                                ]);
                             default:
                                 return null;  // or null if you want to disable the link
                         }

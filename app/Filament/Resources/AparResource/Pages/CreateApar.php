@@ -31,22 +31,12 @@ class CreateApar extends CreateRecord
 
     public function mount(): void
     {
-        $this->toolId = request()->get('tool_id');
+        $this->toolId = request()->get('tool_id');  // this how u get the value in url
     }
 
     public function form(Form $form): Form
     {
         $questions = ChecklistItem::where('safety_tool_id', $this->toolId)->get();
-        // dd($this->toolId);
-
-        // $data = SafetyTool::where('id', request()->get('tool_id'))->first();
-        // dd($data);
-
-        // $data = request('tool_id');
-        // dd($data);
-
-        // dd(request('tool_id'));
-        // $questions = ChecklistItem::where('safety_tool_id', $data)->get();
 
         $questionFields = $questions->map(function ($question) {
             return Grid::make(2)
@@ -80,16 +70,13 @@ class CreateApar extends CreateRecord
                 ]);
         });
 
-        // dd($questionFields);
         return $form
             ->schema($questionFields->toArray());
     }
 
     public function save()
     {
-        // dd($this->form->getState());
         $answers = $this->form->getState()['answers'];
-        // dd($answers);
 
         $insert = [];
         foreach ($answers as $questionId => $response) {
@@ -106,6 +93,6 @@ class CreateApar extends CreateRecord
 
         ChecklistAnswer::insert($insert);
 
-        return redirect()->to('admin/checklist-safeties');
+        return redirect()->to('admin/apars?tool_id=' . $this->toolId);
     }
 }

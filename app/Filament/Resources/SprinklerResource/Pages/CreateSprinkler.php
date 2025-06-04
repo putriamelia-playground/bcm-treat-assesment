@@ -6,9 +6,11 @@ use App\Filament\Resources\SprinklerResource;
 use App\Models\ChecklistAnswer;
 use App\Models\ChecklistItem;
 use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Actions;
@@ -19,40 +21,47 @@ class CreateSprinkler extends CreateRecord
 
     protected static string $view = 'filament.resources.sprinkler-resource.pages.form-sprinkler';
 
+    public ?int $toolId = null;
+
+    public function mount(): void
+    {
+        $this->toolId = request()->get('tool_id');
+    }
+
     public function form(Form $form): Form
     {
-        // $questions = ChecklistItem::where('safety_tool_id', request()->get('tool_id'))->get();  // TODO static id
-        $questions = ChecklistItem::where('safety_tool_id', 17)->get();  // TODO static id
+        $questions = ChecklistItem::where('safety_tool_id', $this->toolId)->get();
 
         $questionFields = $questions->map(function ($question) {
-            // dd($question->questions);
-            return Fieldset::make('')
+            return Grid::make(2)
                 ->schema([
-                    // Placeholder::make("Checklist_Item_{$question->id}") // TODO do increment number here for every questions with the same id
-                    Placeholder::make('Checklist_Item')
-                        ->content($question->questions)
-                        ->columnSpanFull(),
-                    Radio::make("answers.{$question->id}.condition")
-                        ->label('Kondisi')
-                        ->options([
-                            true => 'Baik',
-                            false => 'Buruk',
-                        ])
-                        ->inline()
-                        ->required(),
-                    Radio::make("answers.{$question->id}.function")
-                        ->label('Fungsi')
-                        ->options([
-                            true => 'Baik',
-                            false => 'Buruk',
-                        ])
-                        ->inline()
-                        ->required(),
-                    Hidden::make("answers.{$question->id}.safetyToolId")
-                        ->label('id safety tool')
-                        ->default($question->safety_tool_id),
-                ])
-                ->columns(2);
+                    Fieldset::make('')
+                        ->schema([
+                            Grid::make(3)
+                                ->schema([
+                                    // Placeholder::make("Checklist_Item_{$question->id}")  // TODO do increment number here for every questions with the same id
+                                    Placeholder::make('Checklist_Item')
+                                        ->content($question->questions),
+                                    Select::make("answers.{$question->id}.condition")
+                                        ->label('Kondisi')
+                                        ->options([
+                                            true => 'Baik',
+                                            false => 'Buruk',
+                                        ])
+                                        ->required(),
+                                    Select::make("answers.{$question->id}.function")
+                                        ->label('Fungsi')
+                                        ->options([
+                                            true => 'Baik',
+                                            false => 'Buruk',
+                                        ])
+                                        ->required(),
+                                    Hidden::make("answers.{$question->id}.safetyToolId")
+                                        ->label('id safety tool')
+                                        ->default($question->safety_tool_id),
+                                ])
+                        ]),
+                ]);
         });
 
         return $form
@@ -61,14 +70,13 @@ class CreateSprinkler extends CreateRecord
 
     public function save()
     {
-        // dd($this->form->getState());
         $answers = $this->form->getState()['answers'];
 
         $insert = [];
         foreach ($answers as $questionId => $response) {
             array_push($insert, [
                 'user_id' => auth()->user()->id,
-                'safety_tool_id' => $response['safetyToolId'],
+                'safety_tool_id' => $this->toolId,
                 'checklist_item_id' => $questionId,
                 'condition_answer' => $response['condition'],
                 'function_answer' => $response['function'],
@@ -79,6 +87,6 @@ class CreateSprinkler extends CreateRecord
 
         ChecklistAnswer::insert($insert);
 
-        return redirect()->to('admin/checklist-safeties');
+        return redirect()->to('admin/sprinklers?tool_id=' . $this->toolId);
     }
 }

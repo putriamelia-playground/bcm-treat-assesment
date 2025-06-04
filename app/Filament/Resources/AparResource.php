@@ -51,7 +51,7 @@ class AparResource extends Resource
                     ->formatStateUsing(fn(string $state) => $state == 1 ? 'Baik' : 'Buruk'),
             ])
             ->modifyQueryUsing(function (Builder $query) {
-                return $query->where('safety_tool_id', 1);  // TODO static safety tool id
+                return $query->where('safety_tool_id', request()->get('tool_id'));
             })
             ->filters([
                 //

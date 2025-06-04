@@ -48,7 +48,7 @@ class ApabResource extends Resource
                     ->formatStateUsing(fn(string $state) => $state == 1 ? 'Baik' : 'Buruk'),
             ])
             ->modifyQueryUsing(function (Builder $query) {
-                return $query->where('safety_tool_id', 2);  // TODO static safety tool id
+                return $query->where('safety_tool_id', request()->get('tool_id'));
             })
             ->filters([
                 //
@@ -60,7 +60,8 @@ class ApabResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->paginated(false);
     }
 
     public static function getRelations(): array
